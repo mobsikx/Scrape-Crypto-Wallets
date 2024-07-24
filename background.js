@@ -11,6 +11,13 @@ chrome.runtime.onInstalled.addListener(() => {
   }).catch(error => {
     console.error('Error fetching user:', error);
   });
+
+  // Check scrapping status on installation
+  chrome.storage.local.get(['scrapingEnabled'], function(result) {
+    if (result.scrapingEnabled) {
+      chrome.alarms.create('scrapeWallets', { periodInMinutes: 1 });
+    }
+  });
 });
 
 chrome.alarms.onAlarm.addListener(alarm => {
@@ -66,6 +73,16 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       });
     });
   }
+
+  if (message.action === 'toggleScraping') {
+    if (message.enabled) {
+      chrome.alarms.create('scrapeWallets', { periodInMinutes: 1 });
+      chrome.storage.local.set({ scrapingEnabled: true });
+    } else {
+      chrome.alarms.clear('scrapeWallets');
+      chrome.storage.local.set({ scrapingEnabled: false });
+    }
+  }
 });
 
 function updateBadge() {
@@ -87,4 +104,3 @@ chrome.action.onClicked.addListener((tab) => {
     function: scrapeCryptoWallets
   });
 });
-
