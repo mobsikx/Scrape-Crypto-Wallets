@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Scrape Crypto Wallets - BTC</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      text-align: center;
+      width: 360px;
+    }
+    h1 {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+    .button-group {
+      margin-bottom: 20px;
+    }
+    .button {
+      padding: 10px 15px;
+      margin: 5px 0;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      width: 100%;
+    }
+    .button-start {
+      background-color: #28a745;
+      color: white;
+    }
+    .button-start:hover {
+      background-color: #218838;
+    }
+    .button-stop {
+      background-color: #dc3545;
+      color: white;
+    }
+    .button-stop:hover {
+      background-color: #c82333;
+    }
+    .button-view {
+      background-color: #007bff;
+      color: white;
+    }
+    .button-view:hover {
+      background-color: #0056b3;
+    }
+    #status {
+      font-size: 16px;
+      margin-bottom: 20px;
+    }
+    .small-button {
+      padding: 5px 10px;
+      margin: 5px;
+      font-size: 14px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      background-color: #007bff;
+      color: white;
+    }
+    .small-button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <h1>Scrape Crypto Wallets - BTC</h1>
+  <div class="button-group">
+    <button class="button button-start" id="startScraping">Start Scraping</button>
+    <button class="button button-stop" id="stopScraping">Stop Scraping</button>
+  </div>
+  <div id="status">Scraping is stopped</div>
+  <div class="button-group">
+    <button class="button button-view" id="viewAddresses">View Addresses</button>
+  </div>
+  <div class="button-group">
+    <button class="button" id="payButton">Pay for Premium</button>
+    <button class="button" id="infoButton">Author & Plugin Info</button>
+  </div>
+  <div id="author-info" style="display: none;">
+    <p><strong>Author:</strong> Martin Holy</p>
+    <p><strong>Plugin:</strong> Crypto Wallet Scraper v1.0</p>
+    <p>This plugin extracts cryptocurrency wallet addresses from web pages.</p>
+  </div>
+  <script src="ExtPay.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

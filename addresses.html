@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Scraped Addresses</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      text-align: center;
+    }
+    h1 {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+    .button-group {
+      margin-bottom: 20px;
+    }
+    .button {
+      padding: 10px 15px;
+      margin: 5px 0;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      display: inline-block;
+      min-width: 150px;
+    }
+    .button-download {
+      background-color: #007bff;
+      color: white;
+    }
+    .button-download:hover {
+      background-color: #0056b3;
+    }
+    .button-clear {
+      background-color: #ffc107;
+      color: white;
+    }
+    .button-clear:hover {
+      background-color: #e0a800;
+    }
+    .button-refresh {
+      background-color: #28a745;
+      color: white;
+    }
+    .button-refresh:hover {
+      background-color: #218838;
+    }
+    #account-info {
+      font-size: 16px;
+      margin-bottom: 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      padding: 10px;
+      border: 1px solid #ddd;
+      text-align: left;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+  </style>
+</head>
+<body>
+  <h1>Scraped Addresses</h1>
+  <div id="account-info">
+    <p>Account: <span id="accountEmail"></span></p>
+    <p>Licence status: <span id="licenceStatus"></span></p>
+    <p>Total addresses: <span id="totalAddresses"></span></p>
+    <p>Total domains: <span id="totalDomains"></span></p>
+  </div>
+  <div class="button-group">
+    <button class="button button-download" id="downloadCSV">Download CSV</button>
+    <button class="button button-download" id="copyToClipboard">Copy to Clipboard</button>
+    <button class="button button-download" id="downloadJSON">Download JSON</button>
+    <button class="button button-clear" id="clearAddresses">Clear Addresses</button>
+    <button class="button button-refresh" id="refreshButton">Refresh</button>
+  </div>
+  <table id="addressesTable">
+    <thead>
+      <tr>
+        <th>Address</th>
+        <th>Domains</th>
+      </tr>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
+  <script src="addresses.js"></script>
+</body>
+</html>
