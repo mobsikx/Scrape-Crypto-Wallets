@@ -52,11 +52,14 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 });
 
 function startScraping() {
-  injectScrapingScript();
-  if (scrapingIntervalId === null) {
-    scrapingIntervalId = setInterval(injectScrapingScript, 30000); // 30 seconds
-  }
-  chrome.alarms.create('scrapeWallets', { periodInMinutes: 0.5 });
+  chrome.storage.local.get(['scrapingEnabled'], function(result) {
+    if (result.scrapingEnabled) {
+      injectScrapingScript();
+      if (scrapingIntervalId === null) {
+        scrapingIntervalId = setInterval(injectScrapingScript, 30000); // 30 seconds
+      }
+    }
+  });
 }
 
 function stopScraping() {

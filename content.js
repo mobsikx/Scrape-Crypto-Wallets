@@ -12,9 +12,10 @@ function scrapeCryptoWallets() {
   chrome.runtime.sendMessage({ wallets, domain: window.location.hostname });
 }
 
-// Interval to repeatedly scrape wallets
-const scrapeInterval = 30000; // 30 seconds
-setInterval(scrapeCryptoWallets, scrapeInterval);
-
-// Initial scrape
-scrapeCryptoWallets();
+chrome.storage.local.get(['scrapingEnabled'], function(result) {
+  if (result.scrapingEnabled) {
+    const scrapeInterval = 30000; // 30 seconds
+    setInterval(scrapeCryptoWallets, scrapeInterval);
+    scrapeCryptoWallets(); // Initial scrape
+  }
+});

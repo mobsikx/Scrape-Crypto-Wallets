@@ -140,5 +140,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
   refreshAddresses();
   updateBadge(); // Update the badge on load
-});
 
+  // Disable copy-paste functionality
+  document.addEventListener('copy', (event) => {
+    event.preventDefault();
+    alert('Copy function is disabled');
+  });
+});
