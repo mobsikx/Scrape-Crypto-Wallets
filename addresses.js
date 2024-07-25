@@ -3,10 +3,22 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function checkUserStatus() {
     extpay.getUser().then(user => {
-      document.getElementById('accountEmail').innerText = user.email;
-      document.getElementById('licenceStatus').innerText = user.paid ? 'active' : 'inactive';
+      let licenceStatus = 'inactive';
 
-      if (!user.paid) {
+      if (user.paid && !user.subscriptionCancelAt) {
+        licenceStatus = 'active';
+      } else if (user.paid && user.subscriptionCancelAt) {
+        licenceStatus = 'active (will end)';
+      } else if (user.subscriptionStatus === 'past_due') {
+        licenceStatus = 'payment required';
+      } else if (user.subscriptionStatus === 'canceled') {
+        licenceStatus = 'canceled';
+      }
+
+      document.getElementById('accountEmail').innerText = user.email;
+      document.getElementById('licenceStatus').innerText = licenceStatus;
+
+      if (!user.paid || user.subscriptionStatus === 'canceled' || user.subscriptionStatus === 'past_due') {
         document.getElementById('downloadCSV').addEventListener('click', () => {
           extpay.openPaymentPage();
         });
@@ -120,6 +132,13 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
+  // Auto-refresh every 30 seconds
+  setInterval(() => {
+    refreshAddresses();
+    checkUserStatus();
+  }, 30000);
+
   refreshAddresses();
   updateBadge(); // Update the badge on load
 });
+

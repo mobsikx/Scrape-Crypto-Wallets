@@ -3,51 +3,17 @@ importScripts('ExtPay.js');
 const extpay = ExtPay('crypto-wallet-scrapper---btc');
 extpay.startBackground();
 
+let scrapingIntervalId = null;
+
 chrome.runtime.onInstalled.addListener(() => {
   extpay.getUser().then(user => {
     if (user.paid) {
-      chrome.alarms.create('scrapeWallets', { periodInMinutes: 1 });
+      startScraping();
     }
   }).catch(error => {
     console.error('Error fetching user:', error);
   });
-
-  // Check scrapping status on installation
-  chrome.storage.local.get(['scrapingEnabled'], function(result) {
-    if (result.scrapingEnabled) {
-      chrome.alarms.create('scrapeWallets', { periodInMinutes: 1 });
-    }
-  });
 });
-
-chrome.alarms.onAlarm.addListener(alarm => {
-  if (alarm.name === 'scrapeWallets') {
-    injectScrapingScript();
-  }
-});
-
-function injectScrapingScript() {
-  chrome.tabs.query({ url: ["http://*/*", "https://*/*"] }, function (tabs) {
-    for (let i = 0; i < tabs.length; i++) {
-      chrome.scripting.executeScript({
-        target: { tabId: tabs[i].id },
-        function: scrapeCryptoWallets
-      }).then(() => {
-        console.log('Scraping script injected into tab:', tabs[i].id);
-      }).catch(error => {
-        console.error('Error injecting script into tab:', tabs[i].id, error);
-      });
-    }
-  });
-}
-
-function scrapeCryptoWallets() {
-  const regex = /\b[13][a-km-zA-HJ-NP-Z1-9]{25,34}\b|\bbc1[a-zA-HJ-NP-Z0-9]{39,59}\b/g;
-  let textContent = document.body.innerText;
-  let wallets = textContent.match(regex);
-  wallets = wallets ? wallets : [];
-  chrome.runtime.sendMessage({ wallets, domain: window.location.hostname });
-}
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.wallets && message.domain) {
@@ -75,15 +41,58 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   }
 
   if (message.action === 'toggleScraping') {
-    if (message.enabled) {
-      chrome.alarms.create('scrapeWallets', { periodInMinutes: 1 });
-      chrome.storage.local.set({ scrapingEnabled: true });
-    } else {
-      chrome.alarms.clear('scrapeWallets');
-      chrome.storage.local.set({ scrapingEnabled: false });
-    }
+    chrome.storage.local.set({ scrapingEnabled: message.enabled }, function() {
+      if (message.enabled) {
+        startScraping();
+      } else {
+        stopScraping();
+      }
+    });
   }
 });
+
+function startScraping() {
+  injectScrapingScript();
+  if (scrapingIntervalId === null) {
+    scrapingIntervalId = setInterval(injectScrapingScript, 30000); // 30 seconds
+  }
+  chrome.alarms.create('scrapeWallets', { periodInMinutes: 0.5 });
+}
+
+function stopScraping() {
+  if (scrapingIntervalId !== null) {
+    clearInterval(scrapingIntervalId);
+    scrapingIntervalId = null;
+  }
+  chrome.alarms.clear('scrapeWallets');
+}
+
+function injectScrapingScript() {
+  chrome.storage.local.get(['scrapingEnabled'], function(result) {
+    if (result.scrapingEnabled) {
+      chrome.tabs.query({ url: ["<all_urls>"] }, function (tabs) {
+        for (let i = 0; i < tabs.length; i++) {
+          chrome.scripting.executeScript({
+            target: { tabId: tabs[i].id },
+            function: scrapeCryptoWallets
+          }).then(() => {
+            console.log('Scraping script injected into tab:', tabs[i].id);
+          }).catch(error => {
+            console.error('Error injecting script into tab:', tabs[i].id, error);
+          });
+        }
+      });
+    }
+  });
+}
+
+function scrapeCryptoWallets() {
+  const regex = /\b[13][a-km-zA-HJ-NP-Z1-9]{25,34}\b|\bbc1[a-zA-HJ-NP-Z0-9]{39,59}\b/g;
+  let textContent = document.body.innerText;
+  let wallets = textContent.match(regex);
+  wallets = wallets ? wallets : [];
+  chrome.runtime.sendMessage({ wallets, domain: window.location.hostname });
+}
 
 function updateBadge() {
   chrome.storage.local.get(['walletData'], function (result) {
@@ -98,9 +107,9 @@ function updateBadge() {
   });
 }
 
-chrome.action.onClicked.addListener((tab) => {
-  chrome.scripting.executeScript({
-    target: { tabId: tab.id },
-    function: scrapeCryptoWallets
-  });
+// Kontrola a spuštění scraping při startu
+chrome.storage.local.get(['scrapingEnabled'], function(result) {
+  if (result.scrapingEnabled) {
+    startScraping();
+  }
 });
