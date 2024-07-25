@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function () {
       document.getElementById('accountEmail').innerText = user.email;
       document.getElementById('licenceStatus').innerText = licenceStatus;
 
-      if (!user.paid || user.subscriptionStatus === 'canceled' || user.subscriptionStatus === 'past_due') {
+      if (!user.paid || user.subscriptionStatus === 'past_due' || user.subscriptionStatus === 'canceled') {
         document.getElementById('downloadCSV').addEventListener('click', openPaymentPageOnce);
         document.getElementById('copyToClipboard').addEventListener('click', openPaymentPageOnce);
         document.getElementById('downloadJSON').addEventListener('click', openPaymentPageOnce);
