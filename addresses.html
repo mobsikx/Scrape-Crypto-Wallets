@@ -3,105 +3,146 @@
 <head>
   <title>Scraped Addresses</title>
   <style>
-  body {
-    font-family: Arial, sans-serif;
-    padding: 20px;
-    text-align: center;
-    -webkit-user-select: none;  /* Safari */
-    -moz-user-select: none;     /* Firefox */
-    -ms-user-select: none;      /* Internet Explorer/Edge */
-    user-select: none;          /* Non-prefixed version, currently supported by Chrome, Opera and Edge */
-  }
-  h1 {
-    font-size: 24px;
-    margin-bottom: 20px;
-  }
-  .button-group {
-    margin-bottom: 20px;
-  }
-  .button {
-    padding: 10px 15px;
-    margin: 5px 0;
-    font-size: 16px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    display: inline-block;
-    min-width: 150px;
-  }
-  .button-download {
-    background-color: #007bff;
-    color: white;
-  }
-  .button-download:hover {
-    background-color: #0056b3;
-  }
-  .button-clear {
-    background-color: #ffc107;
-    color: white;
-  }
-  .button-clear:hover {
-    background-color: #e0a800;
-  }
-  .button-refresh {
-    background-color: #28a745;
-    color: white;
-  }
-  .button-refresh:hover {
-    background-color: #218838;
-  }
-  #account-info {
-    font-size: 16px;
-    margin-bottom: 20px;
-  }
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-  }
-  th, td {
-    padding: 10px;
-    border: 1px solid #ddd;
-    text-align: left;
-  }
-  th {
-    background-color: #f2f2f2;
-  }
-  .copy-icon {
-    display: none;
-    cursor: pointer;
-    margin-left: 10px;
-  }
-  .address-cell:hover .copy-icon {
-    display: inline;
-  }
-</style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background-color: #f5f5f5;
+      text-align: left;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+    h1 {
+      font-size: 24px;
+      margin-bottom: 20px;
+      color: #333;
+      text-align: center;
+    }
+    .container {
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      padding: 20px;
+      margin: 20px auto;
+      max-width: 800px;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .info {
+      background: linear-gradient(to right, #000, #333);
+      color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      width: 48%;
+    }
+    .stats {
+      background: linear-gradient(to right, #333, #fff);
+      color: #000;
+      padding: 20px;
+      border-radius: 8px;
+      width: 48%;
+      text-align: right;
+    }
+    .info p, .stats p {
+      margin: 0;
+      padding: 5px 0;
+    }
+    .button-group {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    .button {
+      padding: 10px 15px;
+      margin: 0 5px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      color: #fff;
+      transition: background-color 0.3s;
+    }
+    .button-download {
+      background-color: #007bff;
+    }
+    .button-download:hover {
+      background-color: #0056b3;
+    }
+    .button-clear {
+      background-color: #ffc107;
+    }
+    .button-clear:hover {
+      background-color: #e0a800;
+    }
+    .button-refresh {
+      background-color: #28a745;
+    }
+    .button-refresh:hover {
+      background-color: #218838;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      padding: 10px;
+      border: 1px solid #ddd;
+      text-align: left;
+    }
+    th {
+      background-color: #f2f2f2;
+      color: #333;
+    }
+    tr:hover {
+      background-color: #f1f1f1;
+    }
+    .copy-icon {
+      display: none;
+      cursor: pointer;
+      margin-left: 10px;
+    }
+    .address-cell:hover .copy-icon {
+      display: inline;
+    }
+  </style>
 </head>
 <body>
-  <h1>Scraped Addresses</h1>
-  <div id="account-info">
-    <p>Account: <span id="accountEmail"></span></p>
-    <p>Licence status: <span id="licenceStatus"></span></p>
-    <p>Total addresses: <span id="totalAddresses"></span></p>
-    <p>Total domains: <span id="totalDomains"></span></p>
+  <div class="container">
+    <h1>Scraped Addresses</h1>
+    <div class="header">
+      <div class="info">
+        <p>Account: <span id="accountEmail"></span></p>
+        <p>Licence status: <span id="licenceStatus"></span></p>
+      </div>
+      <div class="stats">
+        <p>Total addresses: <span id="totalAddresses"></span></p>
+        <p>Total domains: <span id="totalDomains"></span></p>
+      </div>
+    </div>
+    <div class="button-group">
+      <button class="button button-download" id="downloadCSV">Download CSV</button>
+      <button class="button button-download" id="copyToClipboard">Copy to Clipboard</button>
+      <button class="button button-download" id="downloadJSON">Download JSON</button>
+      <button class="button button-clear" id="clearAddresses">Clear Addresses</button>
+      <button class="button button-refresh" id="refreshButton">Refresh</button>
+    </div>
+    <table id="addressesTable">
+      <thead>
+        <tr>
+          <th>Address</th>
+          <th>Domains</th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
   </div>
-  <div class="button-group">
-    <button class="button button-download" id="downloadCSV">Download CSV</button>
-    <button class="button button-download" id="copyToClipboard">Copy to Clipboard</button>
-    <button class="button button-download" id="downloadJSON">Download JSON</button>
-    <button class="button button-clear" id="clearAddresses">Clear Addresses</button>
-    <button class="button button-refresh" id="refreshButton">Refresh</button>
-  </div>
-  <table id="addressesTable">
-    <thead>
-      <tr>
-        <th>Address</th>
-        <th>Domains</th>
-      </tr>
-    </thead>
-    <tbody>
-    </tbody>
-  </table>
   <script src="ExtPay.js"></script>
   <script src="addresses.js"></script>
 </body>
