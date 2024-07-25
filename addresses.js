@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', function () {
     for (let wallet in walletData) {
       const tr = document.createElement('tr');
       tr.innerHTML = `
-        <td>${wallet}</td>
+        <td class="address-cell">${wallet} <span class="copy-icon" title="Copy to clipboard" data-address="${wallet}">&#x1F4CB;</span></td>
         <td>${walletData[wallet].domains.join(', ')}</td>
       `;
       tbody.appendChild(tr);
@@ -77,6 +77,18 @@ document.addEventListener('DOMContentLoaded', function () {
 
     document.getElementById('totalAddresses').innerText = Object.keys(walletData).length;
     document.getElementById('totalDomains').innerText = uniqueDomains.size;
+
+    // Add copy event listener
+    document.querySelectorAll('.copy-icon').forEach(icon => {
+      icon.addEventListener('click', function (event) {
+        const address = event.target.getAttribute('data-address');
+        navigator.clipboard.writeText(address).then(() => {
+          alert('Address copied to clipboard');
+        }).catch(err => {
+          console.error('Failed to copy: ', err);
+        });
+      });
+    });
   }
 
   function downloadCSV() {
@@ -132,18 +144,12 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  // Auto-refresh every 30 seconds
+  // Auto-refresh every 5 seconds
   setInterval(() => {
     refreshAddresses();
     checkUserStatus();
-  }, 30000);
+  }, 5000);
 
   refreshAddresses();
   updateBadge(); // Update the badge on load
-
-  // Disable copy-paste functionality
-  document.addEventListener('copy', (event) => {
-    event.preventDefault();
-    alert('Copy function is disabled');
-  });
 });

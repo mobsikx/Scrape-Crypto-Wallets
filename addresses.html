@@ -3,71 +3,79 @@
 <head>
   <title>Scraped Addresses</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      padding: 20px;
-      text-align: center;
-      -webkit-user-select: none;  /* Safari */
-      -moz-user-select: none;     /* Firefox */
-      -ms-user-select: none;      /* Internet Explorer/Edge */
-      user-select: none;          /* Non-prefixed version, currently supported by Chrome, Opera and Edge */
-    }
-    h1 {
-      font-size: 24px;
-      margin-bottom: 20px;
-    }
-    .button-group {
-      margin-bottom: 20px;
-    }
-    .button {
-      padding: 10px 15px;
-      margin: 5px 0;
-      font-size: 16px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      display: inline-block;
-      min-width: 150px;
-    }
-    .button-download {
-      background-color: #007bff;
-      color: white;
-    }
-    .button-download:hover {
-      background-color: #0056b3;
-    }
-    .button-clear {
-      background-color: #ffc107;
-      color: white;
-    }
-    .button-clear:hover {
-      background-color: #e0a800;
-    }
-    .button-refresh {
-      background-color: #28a745;
-      color: white;
-    }
-    .button-refresh:hover {
-      background-color: #218838;
-    }
-    #account-info {
-      font-size: 16px;
-      margin-bottom: 20px;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-    }
-    th, td {
-      padding: 10px;
-      border: 1px solid #ddd;
-      text-align: left;
-    }
-    th {
-      background-color: #f2f2f2;
-    }
-  </style>
+  body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    text-align: center;
+    -webkit-user-select: none;  /* Safari */
+    -moz-user-select: none;     /* Firefox */
+    -ms-user-select: none;      /* Internet Explorer/Edge */
+    user-select: none;          /* Non-prefixed version, currently supported by Chrome, Opera and Edge */
+  }
+  h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  .button-group {
+    margin-bottom: 20px;
+  }
+  .button {
+    padding: 10px 15px;
+    margin: 5px 0;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: inline-block;
+    min-width: 150px;
+  }
+  .button-download {
+    background-color: #007bff;
+    color: white;
+  }
+  .button-download:hover {
+    background-color: #0056b3;
+  }
+  .button-clear {
+    background-color: #ffc107;
+    color: white;
+  }
+  .button-clear:hover {
+    background-color: #e0a800;
+  }
+  .button-refresh {
+    background-color: #28a745;
+    color: white;
+  }
+  .button-refresh:hover {
+    background-color: #218838;
+  }
+  #account-info {
+    font-size: 16px;
+    margin-bottom: 20px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  th, td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: left;
+  }
+  th {
+    background-color: #f2f2f2;
+  }
+  .copy-icon {
+    display: none;
+    cursor: pointer;
+    margin-left: 10px;
+  }
+  .address-cell:hover .copy-icon {
+    display: inline;
+  }
+</style>
 </head>
 <body>
   <h1>Scraped Addresses</h1>
