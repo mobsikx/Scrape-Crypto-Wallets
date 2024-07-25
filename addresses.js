@@ -19,15 +19,9 @@ document.addEventListener('DOMContentLoaded', function () {
       document.getElementById('licenceStatus').innerText = licenceStatus;
 
       if (!user.paid || user.subscriptionStatus === 'canceled' || user.subscriptionStatus === 'past_due') {
-        document.getElementById('downloadCSV').addEventListener('click', () => {
-          extpay.openPaymentPage();
-        });
-        document.getElementById('copyToClipboard').addEventListener('click', () => {
-          extpay.openPaymentPage();
-        });
-        document.getElementById('downloadJSON').addEventListener('click', () => {
-          extpay.openPaymentPage();
-        });
+        document.getElementById('downloadCSV').addEventListener('click', openPaymentPageOnce);
+        document.getElementById('copyToClipboard').addEventListener('click', openPaymentPageOnce);
+        document.getElementById('downloadJSON').addEventListener('click', openPaymentPageOnce);
       } else {
         document.getElementById('downloadCSV').addEventListener('click', downloadCSV);
         document.getElementById('copyToClipboard').addEventListener('click', copyToClipboard);
@@ -36,6 +30,14 @@ document.addEventListener('DOMContentLoaded', function () {
     }).catch(error => {
       console.error('Error fetching user:', error);
     });
+  }
+
+  function openPaymentPageOnce() {
+    if (!openPaymentPageOnce.called) {
+      openPaymentPageOnce.called = true;
+      extpay.openPaymentPage();
+      setTimeout(() => openPaymentPageOnce.called = false, 3000); // Reset after 3 seconds
+    }
   }
 
   checkUserStatus();
