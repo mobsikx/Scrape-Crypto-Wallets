@@ -13,6 +13,14 @@ chrome.runtime.onInstalled.addListener(() => {
   }).catch(error => {
     console.error('Error fetching user:', error);
   });
+
+  // Update badge on installation
+  updateBadge();
+});
+
+chrome.runtime.onStartup.addListener(() => {
+  // Update badge on startup
+  updateBadge();
 });
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
@@ -114,5 +122,7 @@ function updateBadge() {
 chrome.storage.local.get(['scrapingEnabled'], function(result) {
   if (result.scrapingEnabled) {
     startScraping();
+  } else {
+    updateBadge(); // Ensure badge is updated on startup even if scraping is disabled
   }
 });
